@@ -19,7 +19,7 @@ capturar a variância compartilhada entre as variáveis e estes fatores são
 ortogonais entre si.
 Esta base de dados contém 53 variáveis quantitativas e pode ser encontrada no 
 seguinte link: https://www.ispdados.rj.gov.br:4432/estatistica.html. 
-## Carregando os pacotes:
+
 
 ``` {r pacote, echo = FALSE, warning = FALSE,message = FALSE}
 
@@ -38,6 +38,37 @@ if(sum(as.numeric(!pacotes %in% installed.packages())) != 0){
 }
 
 ````
+## Análise fatorial por componentes principais
+A análise fatorial por componentes principais é uma técnica de aprendizado de
+máquina não supervisionado, onde é utilizado como inputs apenas variáveis 
+quantitativas. 
+
+
+## Ponderação arbitrária
+No entanto, faço voz para que não se confunda aqui uma variável
+quantitativa com uma qualitativa que seja expressada de forma numérica, como uma
+variável binária que representa evento e não evento de algo, ou uma Escala de 
+Likert. Tanto a variável binária de evento quanto a Escala de Likert são variáveis
+que expressão categorias, logo não são numéricas, não é possível obter delas 
+por exemplo, medidas de tendência central,dispersão ou correlação. 
+E uma grande ressalva para a Escala de Likert, ainda que seja expressa em números, 
+tal variável tem apenas valor semântico, e valor semântico não se mede, 
+qual é a diferença numérica deruim para péssimo? Realizar uma análise fatorial
+com tais variáveis resultaria em um problema de **Ponderação Arbitária**, onde 
+se estará assumindo pesos numéricos para variáveis quali, onde por exemplo, se
+estívéssemos falando de raça/cor, e dizemos que a cor branca é representada por
+4 e a preta é 2, estamos dizendo com isso que a cor branca vale 2x mais que a 
+preta, e podemos levar preconceito para nossa análise, por isso o cuidado ao
+trabalhar com variáveis qualitativas.
+
+
+
+
+
+
+
+
+
 ## Apresentando a base de dados
 Ao todo esta base contem 92 observações e 54 variáveis, onde apenas a primeira, 
 fmun_cod é qualitativa e representa o nome dos municípios do Estado do Rio de 
@@ -59,15 +90,6 @@ dados <- aggregate(.~fmun, data = dados, FUN= sum)
 
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
