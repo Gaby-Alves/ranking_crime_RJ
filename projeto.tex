@@ -1,0 +1,186 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Projeto Crime Rio},
+  pdfauthor={Gabriela Alves},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Projeto Crime Rio}
+\author{Gabriela Alves}
+\date{14/07/2021}
+
+\begin{document}
+\maketitle
+
+\hypertarget{criminalidade-no-rio-de-janeiro}{%
+\section{Criminalidade no Rio de
+Janeiro}\label{criminalidade-no-rio-de-janeiro}}
+
+Este estudo tem como objetivo criar um ranking com base em dados sobre a
+criminalidade do Estado do Rio de Janeiro. A proposta de criação deste
+ranking se dá por meio da Análise Fatorial por Componentes Principais,
+uma técnica não supervisionada de machine learning que utiliza variáveis
+quantitativas para criar fatores que são responsáveis por capturar a
+variância compartilhada entre as variáveis e estes fatores são
+ortogonais entre si. Esta base de dados contém 53 variáveis
+quantitativas e pode ser encontrada no
+\href{https://www.ispdados.rj.gov.br:4432/estatistica.html}{link}.
+
+\begin{verbatim}
+##            tidyverse                knitr           kableExtra 
+##                 TRUE                 TRUE                 TRUE 
+##                  car                  rgl            gridExtra 
+##                 TRUE                 TRUE                 TRUE 
+## PerformanceAnalytics             reshape2            rayshader 
+##                 TRUE                 TRUE                 TRUE 
+##                psych               pracma              polynom 
+##                 TRUE                 TRUE                 TRUE 
+##                rqPen              ggrepel               plotly 
+##                 TRUE                 TRUE                 TRUE 
+##           factoextra 
+##                 TRUE
+\end{verbatim}
+
+\hypertarget{anuxe1lise-fatorial-por-componentes-principais}{%
+\subsection{Análise fatorial por componentes
+principais}\label{anuxe1lise-fatorial-por-componentes-principais}}
+
+A análise fatorial é uma técnica de aprendizado de máquina não
+supervisionada. É uma técnica multivariada que utiliza apenas variáveis
+quantitativas/métricas e essas variáveis tem um coeficiente de
+correlação alto entre si. O objetivo da análise fatorial é a extração de
+fatores a partir de uma matriz de correlação gerada dessas variáveis (e
+por isso tais variáveis devem ser métricas). Os fatores representam o
+comportamento conjunto das variáveis originais, e pode ser visto como um
+agrupamento de variáveis.
+
+O método de extração por componentes principais é o mais utilizado para
+análise fatorial, este método extrai os fatores a partir das combinações
+lineares das variáveis originais.
+
+Esses fatores são ortogonais entre si, isto é, possui correlação 0 entre
+si, e são capazes de representar o comportamento conjunto das variáveis
+originais, e pode ajudar na observação de comportamentos que antes não
+eram possíveis de serem vistos, e portanto pode-se entender como um
+agrupamento de variáveis.
+
+A análise fatorial por componentes principais tem três grandes usos: -
+1) Redução da dimensionalidade da base dados por meio do agrupamento de
+variáveis. - 2) Confirmação de constructos pré determinados. - 3)
+Elaboração de rankings por meio da criação de indicadores. Sendo a
+elaboração de rankings uma de suas possibilidades é portanto por este
+motivo que será utilizada a análise fatorial por componentes principais
+nesta base de dados, que tem por objetivo a criação de um ranking dos
+municípios do Rio de Janeiro por meio de variáveis relacionadas à
+segurança pública.
+
+\hypertarget{ponderauxe7uxe3o-arbitruxe1ria}{%
+\subsection{Ponderação
+arbitrária}\label{ponderauxe7uxe3o-arbitruxe1ria}}
+
+No entanto, faço voz para que não se confunda aqui uma variável
+quantitativa com uma qualitativa que seja expressada de forma numérica,
+como uma variável binária que representa evento e não evento de algo, ou
+uma Escala deLikert. Tanto a variável binária de evento quanto a Escala
+de Likert são variáveis que expressão categorias, logo não são
+numéricas, não é possível obter delas por exemplo, medidas de tendência
+central,dispersão ou correlação. E uma grande ressalva para a Escala de
+Likert, ainda que seja expressa em números, tal variável tem apenas
+valor semântico, e valor semântico não se mede, qual é a diferença
+numérica deruim para péssimo? Realizar uma análise fatorial com tais
+variáveis resultaria em um problema de \textbf{Ponderação Arbitária},
+onde se estará assumindo pesos numéricos para variáveis quali, onde por
+exemplo, se estívéssemos falando de raça/cor, e dizemos que a cor branca
+é representada por 4 e a preta é 2, estamos dizendo com isso que a cor
+branca vale 2x mais que a preta, e podemos levar preconceito para nossa
+análise, por isso o cuidado ao trabalhar com variáveis qualitativas.
+
+\hypertarget{apresentando-a-base-de-dados}{%
+\subsection{Apresentando a base de
+dados}\label{apresentando-a-base-de-dados}}
+
+Ao todo esta base contem 92 observações e 54 variáveis, onde apenas a
+primeira, fmun\_cod é qualitativa e representa o nome dos municípios do
+Estado do Rio de Janeiro. As restantes variáveis são todas quantitativas
+e representam diferentes tipos de crimes. Para este estudo foi
+selecionado os dados de 2020, que originalmente são apresentados no
+formato mensal, no entanto para observar o ano e evitar a escolha de um
+mês que possa ser atípico, esses dados mensais foram somados e por isso
+temos apenas 92 observações.
+
+\url{https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/}
+\url{https://www.biostars.org/p/303219/}
+
+\end{document}

@@ -173,7 +173,7 @@ pre code {
 
 <div id="criminalidade-no-rio-de-janeiro" class="section level1">
 <h1>Criminalidade no Rio de Janeiro</h1>
-<p>Este estudo tem como objetivo criar um ranking com base em dados sobre a criminalidade do Estado do Rio de Janeiro. A proposta de criação deste ranking se dá por meio da Análise Fatorial por Fatores Principais, uma técnica não supervisionada de machine learning que utiliza variáveis quantitativas para criar fatores que são responsáveis por capturar a variância compartilhada entre as variáveis e estes fatores são ortogonais entre si. Esta base de dados contém 53 variáveis quantitativas e pode ser encontrada no seguinte link: <a href="https://www.ispdados.rj.gov.br:4432/estatistica.html" class="uri">https://www.ispdados.rj.gov.br:4432/estatistica.html</a>.</p>
+<p>Este estudo tem como objetivo criar um ranking com base em dados sobre a criminalidade do Estado do Rio de Janeiro. A proposta de criação deste ranking se dá por meio da Análise Fatorial por Componentes Principais, uma técnica não supervisionada de machine learning que utiliza variáveis quantitativas para criar fatores que são responsáveis por capturar a variância compartilhada entre as variáveis e estes fatores são ortogonais entre si. Esta base de dados contém 53 variáveis quantitativas e pode ser encontrada no <a href="https://www.ispdados.rj.gov.br:4432/estatistica.html">link</a>.</p>
 <pre><code>##            tidyverse                knitr           kableExtra 
 ##                 TRUE                 TRUE                 TRUE 
 ##                  car                  rgl            gridExtra 
@@ -188,11 +188,22 @@ pre code {
 ##                 TRUE</code></pre>
 <div id="análise-fatorial-por-componentes-principais" class="section level2">
 <h2>Análise fatorial por componentes principais</h2>
-<p>A análise fatorial é uma técnica de aprendizado de máquina não supervisionada. É uma técnica multivariada que utiliza apenas variáveis quantitativas/métricas,</p>
+<p>A análise fatorial é uma técnica de aprendizado de máquina não supervisionada. É uma técnica multivariada que utiliza apenas variáveis quantitativas/métricas e essas variáveis tem um coeficiente de correlação alto entre si. O objetivo da análise fatorial é a extração de fatores a partir de uma matriz de correlação gerada dessas variáveis (e por isso tais variáveis devem ser métricas). Os fatores representam o comportamento conjunto das variáveis originais, e pode ser visto como um agrupamento de variáveis.</p>
+<p>O método de extração por componentes principais é o mais utilizado para análise fatorial, este método extrai os fatores a partir das combinações lineares das variáveis originais.</p>
+<p>Esses fatores são ortogonais entre si, isto é, possui correlação 0 entre si, e são capazes de representar o comportamento conjunto das variáveis originais, e pode ajudar na observação de comportamentos que antes não eram possíveis de serem vistos, e portanto pode-se entender como um agrupamento de variáveis.</p>
+<p>A análise fatorial por componentes principais tem três grandes usos:</p>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li>Redução da dimensionalidade da base dados por meio do agrupamento de variáveis.</li>
+<li>Confirmação de constructos pré determinados.</li>
+<li>Elaboração de rankings por meio da criação de indicadores.</li>
+</ol>
+</blockquote>
+<p>Sendo a elaboração de rankings uma de suas possibilidades é portanto por este motivo que será utilizada a análise fatorial por componentes principais nesta base de dados, que tem por objetivo a criação de um ranking dos municípios do Rio de Janeiro por meio de variáveis relacionadas à segurança pública.</p>
 </div>
 <div id="ponderação-arbitrária" class="section level2">
 <h2>Ponderação arbitrária</h2>
-<p>No entanto, faço voz para que não se confunda aqui uma variável quantitativa com uma qualitativa que seja expressada de forma numérica, como uma variável binária que representa evento e não evento de algo, ou uma Escala de Likert. Tanto a variável binária de evento quanto a Escala de Likert são variáveis que expressão categorias, logo não são numéricas, não é possível obter delas por exemplo, medidas de tendência central,dispersão ou correlação. E uma grande ressalva para a Escala de Likert, ainda que seja expressa em números, tal variável tem apenas valor semântico, e valor semântico não se mede, qual é a diferença numérica deruim para péssimo? Realizar uma análise fatorial com tais variáveis resultaria em um problema de <strong>Ponderação Arbitária</strong>, onde se estará assumindo pesos numéricos para variáveis quali, onde por exemplo, se estívéssemos falando de raça/cor, e dizemos que a cor branca é representada por 4 e a preta é 2, estamos dizendo com isso que a cor branca vale 2x mais que a preta, e podemos levar preconceito para nossa análise, por isso o cuidado ao trabalhar com variáveis qualitativas.</p>
+<p>Nesse momento faço voz para que não se confunda aqui uma variável quantitativa com uma qualitativa que seja expressada de forma numérica, como uma variável binária que representa evento e não evento de algo, ou uma Escala deLikert. Tanto a variável binária de evento quanto a Escala de Likert são variáveis que expressão categorias, logo não são numéricas, não é possível obter delas por exemplo, medidas de tendência central,dispersão ou correlação. E uma grande ressalva para a Escala de Likert, ainda que seja expressa em números, tal variável tem apenas valor semântico, e valor semântico não se mede, qual é a diferença numérica deruim para péssimo? Realizar uma análise fatorial com tais variáveis resultaria em um problema de <strong>Ponderação Arbitária</strong>, onde se estará assumindo pesos numéricos para variáveis quali, onde por exemplo, se estívéssemos falando de raça/cor, e dizemos que a cor branca é representada por 4 e a preta é 2, estamos dizendo com isso que a cor branca vale 2x mais que a preta, e podemos levar preconceito para nossa análise, por isso o cuidado ao trabalhar com variáveis qualitativas.</p>
 </div>
 <div id="apresentando-a-base-de-dados" class="section level2">
 <h2>Apresentando a base de dados</h2>
