@@ -129,7 +129,8 @@ para cada par de variáveis se torna uma atividade difícil.
 
 No entanto, um dos grandes usos de uma analise fatorial por componentes principais
 é a redução da dimencionalidade da base de dados, e por isso essa quantidade de 
-variáveis será mantidade
+variáveis será mantida.
+
 ```{r correlacoes, eval = T, echo = F}
 rho <- cor(dados[,2:54])
 ggplotly(
@@ -154,6 +155,23 @@ rho %>%
 )
 ```
 
+## Teste de Esfericidade de Bartlet
+Para saber se é possível utilizar uma análise fatorial em uma base de dados, é 
+necessário realizar antes o Teste de Esfericidades de Bartlet. Este teste consiste
+na comparação da matriz de correlações dos nossos dados com uma matriz identidade
+onde a diagonal principal é dado por 1 e o resto 0, ou seja, é um teste onde a 
+hipótese nula é que as correlações se dão de forma aleatória e a alternativa
+é que essas correlações não se dão de forma aleatória.
+
+Se o p-value do teste for menor que o nível de significância rejeitamos a hipótese
+nula, logo podemos dizer que as correlações não se dão de forma aleatória e podemos
+seguir com a análise fatorial por componentes principais.
+
+```{r bartlet echo = F, eval = T}
+
+cortest.bartlett(R = rho)
+
+```
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
 https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html
