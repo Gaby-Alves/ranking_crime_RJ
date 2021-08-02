@@ -70,7 +70,7 @@ motivo que será utilizada a análise fatorial por componentes principais nesta
 base de dados, que tem por objetivo a criação de um ranking dos municípios do
 Rio de Janeiro por meio de variáveis relacionadas à segurança pública.
 
-## Ponderação arbitrária
+# Ponderação arbitrária
 Nesse momento faço voz para que não se confunda aqui uma variável quantitativa com 
 uma qualitativa que seja expressada de forma numérica, como uma variável binária
 que representa evento e não evento de algo, ou uma Escala deLikert. 
@@ -88,15 +88,19 @@ preta, e podemos levar preconceito para nossa análise, por isso o cuidado ao
 trabalhar com variáveis qualitativas.
 
 
-## Apresentando a base de dados
-Ao todo esta base contem 92 observações e 54 variáveis, onde apenas a primeira, 
-fmun_cod é qualitativa e representa o nome dos municípios do Estado do Rio de 
-Janeiro. As restantes variáveis são todas quantitativas e representam diferentes
-tipos de crimes. 
-Para este estudo foi selecionado os dados de 2020, que originalmente são 
-apresentados no formato mensal, no entanto para observar o ano e evitar a escolha
-de um mês que possa ser atípico, esses dados mensais foram somados e por isso 
-temos apenas 92 observações.
+# Apresentando a base de dados
+
+Para este estudo os dados selecionados são referentes ao ano de 2020, e para cada
+município do Rio de Janeiro se tem dados para cada mês. Para evitar um possível
+mês com comportamento atípico, os dados mensais foram agregados e agora representam
+apenas os dados de 2020, e cada linha é um muicípio.
+
+
+Ao todo esta base, após filtragem e agregação, contém 92 observações e 54 variáveis, 
+onde apenas a primeira, fmun_cod é qualitativa e representa o nome dos municípios
+do Estado do Rio de Janeiro. As restantes variáveis são todas quantitativas e 
+representam diferentes ocorrências de referentes à cada tipo de crime. 
+
 
 ```{r dados,eval = TRUE, echo = FALSE}
 
@@ -107,15 +111,49 @@ dados <- dados %>%
   select(-fmun_cod,-ano, -mes,-mes_ano, -regiao, -fase)
 dados <- aggregate(.~fmun, data = dados, FUN= sum)
 
+dados %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T,
+                font_size = 12) %>% 
+  kable_paper() %>%
+  scroll_box(width ="900px", height = "400px")
+
 ```
-
+# Análise fatorial por componentes principais
 ## Correlações
+A matéria prima de uma análise  fatorial é uma matriz de correlações, que chamaremos
+de rho. Um grande desafio ao se lidar com uma grande quantidade de variáveis 
+quantitativas, e neste caso temos pouco mais de 50, é que uma análise bivariada
+para cada par de variáveis se torna uma atividade difícil.
 
+No entanto, um dos grandes usos de uma analise fatorial por componentes principais
+é a redução da dimencionalidade da base de dados, e por isso essa quantidade de 
+variáveis será mantidade
 ```{r correlacoes, eval = T, echo = F}
-
-
-
+rho <- cor(dados[,2:54])
+ggplotly(
+rho %>% 
+  melt() %>% 
+  ggplot() +
+  geom_tile(aes(x = Var1, y = Var2, fill = value)) +
+  geom_text(aes(x = Var1, y = Var2, label = round(x = value, digits = 3)),
+            size = 4) +
+  labs(x = NULL,
+       y = NULL,
+       fill = "Correlações") +
+  scale_fill_gradient2(low = "dodgerblue4", 
+                       mid = "white", 
+                       high = "brown4",
+                       midpoint = 0) +
+  theme(panel.background = element_rect("white"),
+        panel.grid = element_line("grey95"),
+        panel.border = element_rect(NA),
+        legend.position = "bottom",
+        axis.text.x = element_text(angle = 0))
+)
 ```
 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
+https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html
