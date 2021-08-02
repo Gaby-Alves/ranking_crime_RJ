@@ -49,10 +49,10 @@ dados %>%
 rho <- cor(dados[,2:54])
 
 # Tentando ver as correlações
-chart.Correlation(dados[,2:54])
+chart.Correlationdados[,2:54]
 
 # Construindo um mapa de calor a partir das correlações
-
+ggplotly(
 rho %>% 
   melt() %>% 
   ggplot() +
@@ -71,7 +71,7 @@ rho %>%
         panel.border = element_rect(NA),
         legend.position = "bottom",
         axis.text.x = element_text(angle = 0))
-
+)
 # Teste de esferecidade de Bartlet
 cortest.bartlett(R = rho)
 

@@ -109,6 +109,13 @@ dados <- aggregate(.~fmun, data = dados, FUN= sum)
 
 ```
 
+## Correlações
+
+```{r correlacoes, eval = T, echo = F}
+
+
+
+```
 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
