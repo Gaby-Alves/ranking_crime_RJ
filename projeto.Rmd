@@ -167,11 +167,30 @@ Se o p-value do teste for menor que o nível de significância rejeitamos a hip�
 nula, logo podemos dizer que as correlações não se dão de forma aleatória e podemos
 seguir com a análise fatorial por componentes principais.
 
-```{r bartlet echo = F, eval = T}
+```{r bartlet, echo = F, eval = T}
 
 cortest.bartlett(R = rho)
 
 ```
+## Rodando a PCA
+O pacote utilizado para rodar essa análise fatorial por componentes principais é
+o psych, e ele tem uma peculiaridade, os dados precisam ser padronizados **antes**
+de rodar o algoritmo. Em via de regra, a análise fatorial não precisa de padronização
+só é padronizado na hora de trabalhar com os fatores, então fica a ressalva deste
+pacote.
+
+``` {r echo = F, eval = T,warning = FALSE,message = FALSE}
+
+dados_std <- dados %>%
+  column_to_rownames("fmun") %>%
+  scale() %>%
+  data.frame
+afpca <- prcomp(dados_std)
+summary(afpca)
+```
+
+### Critério de decisão de fatores
+scree plot e criterio da raiz latente de 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
 https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html

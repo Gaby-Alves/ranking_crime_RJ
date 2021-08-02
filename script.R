@@ -26,7 +26,7 @@ dados <- dados %>%
 
 # Somando as linhas para cada município já que o group_by é um pau no cu
 dados <- aggregate(.~fmun, data = dados, FUN= sum)
-
+save(dados,file="dados.Rda")
 
 # Escolhendo as variáveis ------
 # Olhando a soma das colunas
@@ -43,7 +43,13 @@ dados %>%
   kable() %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = T,
-                font_size = 12)
+                font_size = 12) %>% 
+  kable_paper() %>%
+  scroll_box(width ="500px", height = "200px")
+
+dados %>%
+  kable_paper() %>%
+  scroll_box()
 # Testando a possibilidade de uma PCA ----------
 
 rho <- cor(dados[,2:54])
