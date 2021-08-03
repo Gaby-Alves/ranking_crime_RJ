@@ -23,7 +23,7 @@ Esta base de dados contém 53 variáveis quantitativas e pode ser encontrada no
 [link](https://www.ispdados.rj.gov.br:4432/estatistica.html). 
 
 
-``` {r pacote, echo = FALSE, warning = FALSE,message = FALSE}
+``` {r pacote, echo = FALSE, warning = FALSE,message = FALSE,include=FALSE}
 
 pacotes <- c("tidyverse","knitr","kableExtra","car","rgl","gridExtra",
              "PerformanceAnalytics","reshape2","rayshader","psych","pracma",
@@ -131,7 +131,7 @@ No entanto, um dos grandes usos de uma analise fatorial por componentes principa
 é a redução da dimencionalidade da base de dados, e por isso essa quantidade de 
 variáveis será mantida.
 
-```{r correlacoes, eval = T, echo = F}
+```{r correlacoes, eval = T, echo = F,}
 rho <- cor(dados[,2:54])
 ggplotly(
 rho %>% 
@@ -165,7 +165,9 @@ hipótese nula é que as correlações se dão de forma aleatória e a alternati
 
 Se o p-value do teste for menor que o nível de significância rejeitamos a hipótese
 nula, logo podemos dizer que as correlações não se dão de forma aleatória e podemos
-seguir com a análise fatorial por componentes principais.
+seguir com a análise fatorial por componentes principais. Nesse caso temos que
+o pvalue é 0, logo menor que 0.005, e portanto podemos seguir com a análise 
+fatorial.
 
 ```{r bartlet, echo = F, eval = T}
 
@@ -179,7 +181,7 @@ de rodar o algoritmo. Em via de regra, a análise fatorial não precisa de padro
 só é padronizado na hora de trabalhar com os fatores, então fica a ressalva deste
 pacote.
 
-``` {r echo = F, eval = T,warning = FALSE,message = FALSE}
+``` {r echo = F, eval = T,warning = FALSE,message = FALSE,include=FALSE}
 
 dados_std <- dados %>%
   column_to_rownames("fmun") %>%
