@@ -90,7 +90,7 @@ dados_std <- dados %>%
 
 afpca <- prcomp(dados_std)
 summary(afpca)
-
+afpca$sdev^2
 
 # Screeplot 
 ggplotly(

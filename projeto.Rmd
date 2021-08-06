@@ -192,6 +192,32 @@ summary(afpca)
 ```
 
 ### Critério de decisão de fatores
+Para a decisão do número de fatores o critério mais utilizado é o Critério da 
+Raíz Latente, que consiste na extração de fatores igual ao número de eigen
+values maiores que 1. 
+
+Em nosso caso, utilizando este critério poderíamos extrair 2 fatores. E o 
+conjunto desses autovalores conseguem explicar cerca de 95% da variância compartilhada
+das  variáveis independetes originais. Onde o primeiro fator sozinho consegue
+capturar 92.85% da variância compartilhada e o segundo 2.17%.
+
+É também possível decidir a quantitade de fatores utilizados pelo Scree Plot,
+onde a decisão se dá devido a inclinação da curva, quando ela para de fazer grandes
+quedas, esse é o ponto de corte. E por esse critério 1 fator parece ser suficiente,
+ainda mais se considerarmos que o primeiro fator consegue explicar 92.85%.
+
+```{r echo = F,warning = FALSE,message = FALSE}
+
+ggplotly(
+  fviz_eig(X= afpca,
+           ggtheme = theme_bw(),
+           barcolor = "black",
+           barfill = "dodgerblue4",
+           linecolor = "darkgoldenrod4")
+)
+```
+
+
 scree plot e criterio da raiz latente de 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
