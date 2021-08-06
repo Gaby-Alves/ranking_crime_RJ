@@ -191,6 +191,56 @@ afpca <- prcomp(dados_std)
 summary(afpca)
 ```
 
+
+### Estudando os fatores
+
+O número de fatores gerados por uma PCA é igual ao número de variáveis utilizadas
+para construí-la, no entanto não faria sentido usar a quantitade máxima de fatores
+visto que um dos objetivos da PCA é a redução de dimensionalidade da base.
+
+
+Logo, cada fator vai puxar pra si um pouco do comportamento de cada variável e assim
+explicar o comportamento conjunto das variáveis, sendo que determinado fator pode
+puxar muito pouco de uma variável, e nada de outras como podemos ver a seguir.
+
+```{r echo =  F, warning=F, message=F}
+
+ggplotly(
+  data.frame(afpca$rotation) %>%
+    mutate(var= names(dados[2:54])) %>%
+    melt(id.vars = "var") %>%
+    mutate(var = factor(var)) %>%
+    ggplot(aes(x=var, y = value, fill = var)) +
+    geom_bar(stat = "identity", color = "black")+
+    facet_wrap(~variable) +
+    labs(x = NULL, y = NULL, fill = "Legenda:") +
+    scale_fill_viridis_d()+
+    theme_bw() +
+    theme(axis.text.x = element_text(angle=90))
+ )
+
+
+```
+A partir da tabela a baixo podemos ver todos os fatores gerados pela análise fatorial,
+e com isso podemos ver o quanto cada fator consegue explicar do conjunto de 
+variáveis. Logo no primeiro fator temos 93% da variância explicada, e somente 
+somando todas as variâncias de cada fator teríamos 100% da variância explicada.
+
+
+```{r echo = F,warning = FALSE,message = FALSE}
+
+
+
+data.frame(eigen_value = afpca$sdev ^ 2,
+                        variancia_compartilhada = summary(afpca)$importance[2,],
+                        variancia_cumulativa = summary(afpca)$importance[3,]) %>% kable() %>%
+kable_styling(bootstrap_options = "striped",
+full_width = T,
+font_size =12) %>%
+kable_paper() %>%
+scroll_box(width ="900px", height = "400px")
+```
+
 ### Critério de decisão de fatores
 Para a decisão do número de fatores o critério mais utilizado é o Critério da 
 Raíz Latente, que consiste na extração de fatores igual ao número de eigen
@@ -215,10 +265,10 @@ ggplotly(
            barfill = "dodgerblue4",
            linecolor = "darkgoldenrod4")
 )
+
 ```
-
-
 scree plot e criterio da raiz latente de 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
 https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html
+
