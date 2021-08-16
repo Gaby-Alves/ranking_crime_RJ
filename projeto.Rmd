@@ -227,6 +227,7 @@ variáveis. Logo no primeiro fator temos 93% da variância explicada, e somente
 somando todas as variâncias de cada fator teríamos 100% da variância explicada.
 
 
+
 ```{r echo = F,warning = FALSE,message = FALSE}
 
 
@@ -265,6 +266,46 @@ ggplotly(
            barfill = "dodgerblue4",
            linecolor = "darkgoldenrod4")
 )
+
+```
+
+
+# Extraindo as cargas fatoriais.
+Como comentado acima, pelo critério da raíz latente,  o número de extração de fatores
+é 2, ou seja, são 2 fatores que tem eigen values > 1. Os valores desses fatores podem ser
+vistos na tabela abaixo, no entanto, de acordo com o Scree plot e a % de captura
+de variância do primeiro fator (92.85%), e por isso será somente ele o fator utilizado
+para a criação deste ranking.
+
+``` {r echo = F,warning = FALSE,message = FALSE}
+k <- sum((afpca$sdev)>1)
+cargas_fatoriais <- afpca$rotation[,1:k] %*% diag(afpca$sdev[1:k])
+
+
+relatorio_cargas_fatoriais <- data.frame(cargas_fatoriais) %>%
+rename(F1 = X1,
+        F2 = X2) %>%
+        kable() %>%
+        kable_styling(bootstrap_options = "striped",
+                full_width= T, 
+                font_size = 12) %>%
+  kable_paper() %>%
+  scroll_box(width ="900px", height = "400px")
+
+
+relatorio_cargas_fatoriais
+
+
+```
+
+
+```
+data.frame(rowSums(cargas_fatoriais ^ 2)) %>%
+rename(comunalidades = 1) %>%
+kable() %>%
+kable_styling(bootstrap_options = "striped",
+full_width = T,
+font_size =12)
 
 ```
 scree plot e criterio da raiz latente de 

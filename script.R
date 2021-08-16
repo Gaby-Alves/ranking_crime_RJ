@@ -13,6 +13,7 @@ if(sum(as.numeric(!pacotes %in% installed.packages())) != 0){
   sapply(pacotes, require, character = T) 
 }
 
+
 # Carregando a base de dados --------------------
 dados <- read.csv2("BaseMunicipioMensal.csv")
 dados
