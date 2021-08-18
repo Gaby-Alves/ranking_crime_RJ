@@ -270,7 +270,7 @@ ggplotly(
 ```
 
 
-# Extraindo as cargas fatoriais.
+# Extraindo as cargas fatoriais e comunalidades
 Como comentado acima, pelo critério da raíz latente,  o número de extração de fatores
 é 2, ou seja, são 2 fatores que tem eigen values > 1. Sendo assim podemos realizar
 a extração de 2 fatores. 
@@ -307,14 +307,19 @@ data.frame(cargas_fatoriais) %>%
 ```
 
 
+
+Visualmente conseguimos ver por meio do gráfico de cargas fatoriais, fatores e 
+observações que o primeiro fator está capturando os 92.85% de variância total
+compartilhada, enquanto o segundo captura apenas 2.18%, e de modo geral,
+as vaiáveis estão tendendo a se relacionar mais fortemente com o fator um.
+
+ 
 De acordo com o Scree plot que nos mostra uma boa nota de corte no primeiro fator,
 as cargas fatoriais que mostram a alta correleção do primeiro fator com as variáveis 
 de origem e o percentual de captura devariância total compartilhada do primeiro fator
-(92.85%),  
+(92.85%).
 
- 
-
-``` {r}
+``` {r echo = F, warning = F, message = F}
 
 data.frame(cargas_fatoriais) %>%
   ggplot(aes(x = X1, y = X2)) +
@@ -334,6 +339,9 @@ data.frame(cargas_fatoriais) %>%
   
   
 ```
+
+
+
 
 scree plot e criterio da raiz latente de 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/

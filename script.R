@@ -1,7 +1,7 @@
 # Instalando pacotes -----------------------
 pacotes <- c("tidyverse","knitr","kableExtra","car","rgl","gridExtra",
              "PerformanceAnalytics","reshape2","rayshader","psych","pracma",
-             "polynom","rqPen","ggrepel", "plotly","factoextra")
+             "polynom","rqPen","ggrepel", "plotly","factoextra","viridis")
 
 if(sum(as.numeric(!pacotes %in% installed.packages())) != 0){
   instalador <- pacotes[!pacotes %in% installed.packages()]
@@ -179,4 +179,11 @@ data.frame(cargas_fatoriais) %>%
   theme_bw()
 
 
+# Plotando os indivíduos vs fatores
+fviz_pca_ind(afpca,
+             col.ind = "cos2", # cor pela qualidade da representação
+             gradient.cols = viridis(3),
+             repel = T,
+             legend.title = "Representação"
+)
 # Construção do ranking ------
