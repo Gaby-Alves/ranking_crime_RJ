@@ -149,6 +149,18 @@ data.frame(rowSums(cargas_fatoriais ^ 2 )) %>%
                 full_width = T,
                 font_size = 12)
 
+
+
+# Visualizando as cargas fatoriais e comunalidades
+data.frame(cargas_fatoriais) %>%
+  rename(F1=X1,
+         F2=X2) %>%
+  mutate(comunalidades = rowSums(cargas_fatoriais ^2 )) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T,
+                font_size = 12)
+
 # Plotando as cargas fatoriais
 data.frame(cargas_fatoriais) %>%
   ggplot(aes(x = X1, y = X2)) +

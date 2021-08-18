@@ -272,42 +272,69 @@ ggplotly(
 
 # Extraindo as cargas fatoriais.
 Como comentado acima, pelo critério da raíz latente,  o número de extração de fatores
-é 2, ou seja, são 2 fatores que tem eigen values > 1. Os valores desses fatores podem ser
-vistos na tabela abaixo, no entanto, de acordo com o Scree plot e a % de captura
-de variância do primeiro fator (92.85%), e por isso será somente ele o fator utilizado
-para a criação deste ranking.
+é 2, ou seja, são 2 fatores que tem eigen values > 1. Sendo assim podemos realizar
+a extração de 2 fatores. 
+Por meio das cargas fatoriais conseguimos ver a correlação entre cada fator e 
+cada variável de origem.
+Conseguimos então observar que o primeiro fator consegue se relacionar  fortemente
+com várias variáveis, e o segundo se correlaciona com menos intensidade e com menos
+variáveis.
 
 ``` {r echo = F,warning = FALSE,message = FALSE}
+
+```
+Já as comunalidades representam a variância total compartilhada de cada uma dar 
+variágeis de origem com todos os fatores extraídos. E assim,conseguimos ver o quanto
+os fatores conseguem ser eficiêntes, dado que em grande maioria das variáveis
+eles juntos conseguem capturar pelo menos 90% da variância total compartilhada.
+
+``` {r echo = F,warning = FALSE,message = FALSE}
+
 k <- sum((afpca$sdev)>1)
 cargas_fatoriais <- afpca$rotation[,1:k] %*% diag(afpca$sdev[1:k])
 
-
-relatorio_cargas_fatoriais <- data.frame(cargas_fatoriais) %>%
-rename(F1 = X1,
-        F2 = X2) %>%
-        kable() %>%
-        kable_styling(bootstrap_options = "striped",
-                full_width= T, 
+data.frame(cargas_fatoriais) %>%
+  rename(F1=X1,
+         F2=X2) %>%
+  mutate(comunalidades = rowSums(cargas_fatoriais ^2 )) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T,
                 font_size = 12) %>%
   kable_paper() %>%
-  scroll_box(width ="900px", height = "400px")
-
-
-relatorio_cargas_fatoriais
-
+  scroll_box(width = "900px", heigh = "400px")
 
 ```
 
 
-```
-data.frame(rowSums(cargas_fatoriais ^ 2)) %>%
-rename(comunalidades = 1) %>%
-kable() %>%
-kable_styling(bootstrap_options = "striped",
-full_width = T,
-font_size =12)
+De acordo com o Scree plot que nos mostra uma boa nota de corte no primeiro fator,
+as cargas fatoriais que mostram a alta correleção do primeiro fator com as variáveis 
+de origem e o percentual de captura devariância total compartilhada do primeiro fator
+(92.85%),  
 
+ 
+
+``` {r}
+
+data.frame(cargas_fatoriais) %>%
+  ggplot(aes(x = X1, y = X2)) +
+  geom_point(color = "dodgerblue4") +
+  geom_hline(yintercept = 0, color = "darkgoldenrod3", linetype = "dashed") +
+  geom_vline(xintercept = 0, color = "darkgoldenrod3", linetype = "dashed") +
+  geom_text_repel(label = row.names(cargas_fatoriais)) +
+  labs(x = paste("F1", paste0("(",
+                              round(summary(afpca)$importance[2,1] * 100,
+                                    digits = 2),
+                              "%)")),
+       y = paste("F2", paste0("(",
+                              round(summary(afpca)$importance[2,2] * 100,
+                                    digits = 2),
+                              "%)"))) +
+  theme_bw()
+  
+  
 ```
+
 scree plot e criterio da raiz latente de 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
 https://www.biostars.org/p/303219/
