@@ -364,7 +364,7 @@ scores_fatoriais %>%
   data.frame() %>%
   rename(PC1 = 1,
          PC2 = 2) %>%
-  select(PC1, PC2) %>%
+  select(PC1) %>%
   kable() %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = T,
@@ -372,7 +372,15 @@ scores_fatoriais %>%
   kable_paper() %>%
   scroll_box(width = "900px", heigh = "400px")
 ```
-
+Para a criação do ranking foi realizado o espelhamento do fator, visto que a 
+concentração das cargas fatoriais estava negativa, fazendo com que se mantida
+o ranking ficaria com valores negativos. 
+Após a soma dos scores fatoriais que foram multiplicados pelas variáveis originais
+padronizadas, foi feita a multiplicação do fator pela variância compartilhada 
+para cada observação e assim, foi criada a coluna pontuação, que é o ranking 
+de segurança pública, onde quando ele é maior para municípios mais "perigosos"
+e menor para municípios melhores. Sendo assim temos o município com maior 
+pontuação o Rio de Janeiro, e o menor Macuco.
 
 ``` {r echo = F, warning =F}
 
@@ -386,19 +394,12 @@ score_d1 <- scores_fatoriais [1,]
 # Estabelecendo o ranking
 F1 <- t(apply(dados_std, 1, function(x) x * score_d1))
 
-F1
 #Na construção de rankings no R, devemos efetuar a multiplicação por -1, 
 #visto que os scores fatoriais das observações mais fortes são, por padrão, 
 #apresentados acompanhados do sinal de menos.
 
 F1 <- data.frame(F1) %>%
   mutate(fator1 = rowSums(.) * -1)
-
-F1 %>% kable() %>%
-  kable_styling(bootstrap_options = "striped",
-                full_width = T,
-                font_size = 12)
-
 
 # Importando as colunas de fatores F1 e F2
 dados["Fator1"] <- F1$fator1
@@ -411,20 +412,19 @@ dados["Fator1"] <- F1$fator1
 
 var_compartilhada <- (afpca$sdev ^2 /sum(afpca$sdev  ^2))
 
-var_compartilhada
-
-
 dados <- dados %>%
   mutate(pontuacao = Fator1 *var_compartilhada[1])
 
 
 # Visualizando o ranking final
 dados %>%
-  arrange(pontuacao) %>%
+  arrange(desc(pontuacao)) %>%
   kable() %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = T,
-                font_size = 12)
+                font_size = 12) %>%
+  kable_paper() %>%
+  scroll_box(width = "900px", heigh = "400px")
 
 ```
 
