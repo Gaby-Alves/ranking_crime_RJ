@@ -313,11 +313,6 @@ observações que o primeiro fator está capturando os 92.85% de variância tota
 compartilhada, enquanto o segundo captura apenas 2.18%, e de modo geral,
 as vaiáveis estão tendendo a se relacionar mais fortemente com o fator um.
 
- 
-De acordo com o Scree plot que nos mostra uma boa nota de corte no primeiro fator,
-as cargas fatoriais que mostram a alta correleção do primeiro fator com as variáveis 
-de origem e o percentual de captura devariância total compartilhada do primeiro fator
-(92.85%).
 
 ``` {r echo = F, warning = F, message = F}
 
@@ -340,8 +335,98 @@ data.frame(cargas_fatoriais) %>%
   
 ```
 
+ 
+De acordo com o Scree plot que nos mostra uma boa nota de corte no primeiro fator,
+as cargas fatoriais que mostram a alta correleção do primeiro fator com as variáveis 
+de origem e o percentual de captura devariância total compartilhada do primeiro fator
+(92.85%).
 
 
+Dado o forte poder de captura da variância capturada pelo primeiro fator, ainda 
+que o segundo fator passe pelo Critério da Raíz Latente de Kaiser, para a 
+construção do ranking proposto nesse projeto, usaremos apenas o primeiro fator.
+
+## Construção do Ranking
+# Scores fatorias
+
+Para poder criar os fatores, primeiramente precisamos criar os scores fatoriais
+que nada mais são do que os eigen vectors divido pela raíz quadrada de cada eigen
+value. 
+A soma da multiplicação dos scores fatoriais com os valores das variáveis originais 
+padronizadas é o que gera os Fatores.
+``` {r warning = F, echo = F}
+
+scores_fatoriais <- t(afpca$rotation)/afpca$sdev
+colnames(scores_fatoriais) <- colnames(dados_std)
+
+scores_fatoriais %>%
+  t() %>%
+  data.frame() %>%
+  rename(PC1 = 1,
+         PC2 = 2) %>%
+  select(PC1, PC2) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T,
+                font_size = 12) %>%
+  kable_paper() %>%
+  scroll_box(width = "900px", heigh = "400px")
+```
+
+
+``` {r echo = F, warning =F}
+
+#Proposta de criação do ranking 
+# Assumindo apenas F1 como um indicador
+
+
+score_d1 <- scores_fatoriais [1,]
+
+
+# Estabelecendo o ranking
+F1 <- t(apply(dados_std, 1, function(x) x * score_d1))
+
+F1
+#Na construção de rankings no R, devemos efetuar a multiplicação por -1, 
+#visto que os scores fatoriais das observações mais fortes são, por padrão, 
+#apresentados acompanhados do sinal de menos.
+
+F1 <- data.frame(F1) %>%
+  mutate(fator1 = rowSums(.) * -1)
+
+F1 %>% kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T,
+                font_size = 12)
+
+
+# Importando as colunas de fatores F1 e F2
+dados["Fator1"] <- F1$fator1
+
+
+#Criando um ranking pela soma ponderada dos fatores por sua variância
+#compartilhada:
+
+#Calculando a variância compartilhada
+
+var_compartilhada <- (afpca$sdev ^2 /sum(afpca$sdev  ^2))
+
+var_compartilhada
+
+
+dados <- dados %>%
+  mutate(pontuacao = Fator1 *var_compartilhada[1])
+
+
+# Visualizando o ranking final
+dados %>%
+  arrange(pontuacao) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T,
+                font_size = 12)
+
+```
 
 scree plot e criterio da raiz latente de 
 https://www.geeksforgeeks.org/sum-of-rows-based-on-column-value-in-r-dataframe/
